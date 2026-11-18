@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#242139">
+  <title>Untuk Nadia · Panggilan dari 2036</title>
+  <link rel="icon" type="image/png" href="aset/ikon-nadia.png">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="cerita.js"></script>
+  <script defer src="suara.js"></script>
+  <script defer src="game.js"></script>
+</head>
+<body>
+  <svg class="symbol-bank" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="i-letter" viewBox="0 0 24 24"><path d="M3 5.5h18v13H3zM3 6l9 7 9-7"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 11 9-8 9 8M6 10v10h12V10"/></symbol>
+    <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M3 7h7m4 0h7M3 17h3m4 0h11"/><circle cx="12" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 0 1 14 0Z"/><circle cx="12" cy="10" r="2"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m5 5 14 14M5 19 19 5"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20 3 11V6h3V4h4l2 3 2-3h4v2h3v5z"/></symbol>
+  </svg>
+  <main class="book">
+    <section id="cover" class="cover" aria-labelledby="title">
+      <div class="cover-art" role="img" aria-label="Di ambang jendela menghadap teluk, HP dan perahu tiketmu menunggu di atas surat."></div>
+      <div class="cover-info">
+        <div class="ticket-mark"><span class="mark"><svg aria-hidden="true"><use href="#i-letter"/></svg></span><span>Surat dari Zubair</span><span class="ticket-rule"></span></div>
+        <h1 id="title">Untuk<br><em>Nadia<span class="title-dot">.</span></em></h1>
+        <p class="cover-premise">Nad, kalau teleponku masuk dari sepuluh tahun lagi, kamu masih mau angkat?</p>
+        <div class="ticket-bottom">
+          <div class="chapter-line"><b>Bab 1</b><span>Panggilan dari 2036</span></div>
+          <button id="start" type="button" class="primary"><span id="startLabel">Buka surat dari Kakak</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+          <div class="cover-actions"><button id="restart" class="text-button" type="button" hidden>Mulai dari awal</button><button id="coverAudio" class="text-button" type="button">Atur audio</button></div>
+        </div>
+      </div>
+    </section>
+    <section id="play" class="play" aria-label="Panggilan dari 2036" hidden>
+      <header class="bar">
+        <button class="icon-button" type="button" id="home" aria-label="Kembali ke judul"><svg><use href="#i-home"/></svg></button>
+        <div class="brand">Untuk <i>Nadia.</i></div>
+        <button class="icon-button" type="button" id="sound" aria-label="Atur audio"><svg><use href="#i-sliders"/></svg></button>
+      </header>
+      <div id="stage" class="stage" data-bg="pelabuhan">
+        <div class="place"><svg aria-hidden="true"><use href="#i-pin"/></svg><span id="location"></span><time id="clock"></time></div>
+        <div id="channel" class="channel" hidden></div>
+        <div id="cast" class="cast" aria-hidden="true"><div id="actorA" class="person"></div><div id="actorB" class="person" hidden></div></div>
+      </div>
+      <article class="card">
+        <div class="card-line"><div class="avatar-frame" aria-hidden="true"><div id="avatar" class="person"></div></div><div class="byline"><span id="voiceKind"></span><h2 id="speaker"></h2></div><span id="part" class="part"></span></div>
+        <p id="words" class="words" aria-live="polite" aria-atomic="true"></p>
+        <div id="choices" class="choices" aria-label="Jawaban Nadia" hidden></div>
+        <div class="card-bottom"><div id="progress" class="progress" role="img" aria-label="Bagian 1 dari 5"><i></i><i></i><i></i><i></i><i></i></div><button id="next" type="button" class="next"><span id="nextLabel">Lanjut</span><svg><use href="#i-arrow"/></svg></button></div>
+      </article>
+    </section>
+    <section id="end" class="ending" aria-labelledby="endTitle" hidden>
+      <figure class="ending-art"><img src="aset/foto-2036.webp" alt="Zubair dan Nadia sepuluh tahun lagi memeluk putra yang memegang kapal kertas dan putri yang membawa gambar matahari ungu."><figcaption>Rumah kita &nbsp;·&nbsp; 2036</figcaption></figure>
+      <div class="ending-paper">
+        <div class="ticket-mark"><span class="mark"><svg><use href="#i-heart"/></svg></span><span>Bab 1 selesai</span><span class="ticket-rule"></span></div>
+        <h2 id="endTitle">Sini, <em>Nad.</em></h2>
+        <p id="endText"></p>
+        <p class="signature">Yang selalu angkat kalau kamu nelepon,<br><em>Kak Zubair</em></p>
+        <button id="again" type="button" class="primary"><span>Baca lagi dari awal</span><svg><use href="#i-arrow"/></svg></button>
+        <div class="cover-actions"><button type="button" id="endHome" class="text-button">Kembali ke judul</button><button type="button" id="endAudio" class="text-button">Atur audio</button></div>
+      </div>
+    </section>
+  </main>
+  <dialog id="audioPanel" aria-labelledby="audioTitle">
+    <div class="panel-top"><h2 id="audioTitle">Atur audio</h2><button id="closeAudio" type="button" class="icon-button" aria-label="Tutup pengaturan audio"><svg><use href="#i-close"/></svg></button></div>
+    <label class="setting"><span>Musik latar</span><input id="musicSetting" type="checkbox" checked></label>
+    <label class="setting"><span>Suara karakter</span><input id="voiceSetting" type="checkbox" checked></label>
+    <label class="setting"><span>Efek suara</span><input id="fxSetting" type="checkbox" checked></label>
+  </dialog>
+</body>
+</html>

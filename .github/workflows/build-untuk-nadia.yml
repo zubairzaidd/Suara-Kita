@@ -1,0 +1,81 @@
+name: Build APK - Untuk Nadia
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: untuk-nadia
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          package-manager-cache: false
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Buat sulih suara Indonesia
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends espeak-ng ffmpeg
+          python3 scripts/rekam.py
+
+      - name: Siapkan Capacitor dan proyek Android
+        run: |
+          test -s www/index.html
+          for file in nadia zubair pelabuhan rumah kapal kamar; do test -s "www/aset/$file.png"; done
+          for file in surat-senja foto-2036 si-kakak si-adik; do test -s "www/aset/$file.webp"; done
+          test -s www/audio/seberang-jendela.ogg
+          test -s www/audio/lampu-rumah.ogg
+          test -s www/audio/dialog/tiket-1.ogg
+          npm install --no-audit --no-fund
+          ./node_modules/.bin/cap add android
+
+      - name: Pasang ikon Nadia
+        run: |
+          appres=android/app/src/main/res
+          for file in "$appres"/mipmap-*/ic_launcher.png "$appres"/mipmap-*/ic_launcher_round.png; do
+            if [ -f "$file" ]; then cp www/aset/ikon-nadia.png "$file"; fi
+          done
+          for file in "$appres"/mipmap-anydpi-v26/ic_launcher{,_round}.xml; do
+            if [ -f "$file" ]; then rm "$file"; fi
+          done
+
+      - name: Atur layar potret
+        shell: python
+        run: |
+          from pathlib import Path
+          from xml.etree import ElementTree as ET
+
+          path = Path("android/app/src/main/AndroidManifest.xml")
+          android = "http://schemas.android.com/apk/res/android"
+          ET.register_namespace("android", android)
+          manifest = ET.parse(path)
+          name = f"{{{android}}}name"
+          main = next(a for a in manifest.findall("./application/activity")
+                      if a.get(name, "").split(".")[-1] == "MainActivity")
+          main.set(f"{{{android}}}screenOrientation", "portrait")
+          manifest.write(path, encoding="utf-8", xml_declaration=True)
+
+      - name: Build APK debug
+        working-directory: untuk-nadia/android
+        run: bash ./gradlew --no-daemon :app:assembleDebug
+
+      - name: Simpan APK
+        uses: actions/upload-artifact@v7
+        with:
+          name: Untuk-Nadia-Bab1-APK
+          path: untuk-nadia/android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
