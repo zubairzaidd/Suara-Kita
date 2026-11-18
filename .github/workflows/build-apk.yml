@@ -1,1 +1,57 @@
+name: Build Android APK
 
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          package-manager-cache: false
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Siapkan Capacitor dan proyek Android
+        run: |
+          test -s www/index.html
+          npm install --no-audit --no-fund
+          ./node_modules/.bin/cap add android
+
+      - name: Atur layar potret
+        shell: python
+        run: |
+          from pathlib import Path
+          from xml.etree import ElementTree as ET
+
+          path = Path("android/app/src/main/AndroidManifest.xml")
+          android = "http://schemas.android.com/apk/res/android"
+          ET.register_namespace("android", android)
+          manifest = ET.parse(path)
+          name = f"{{{android}}}name"
+          main = next(a for a in manifest.findall("./application/activity")
+                      if a.get(name, "").split(".")[-1] == "MainActivity")
+          main.set(f"{{{android}}}screenOrientation", "portrait")
+          manifest.write(path, encoding="utf-8", xml_declaration=True)
+
+      - name: Build APK debug
+        working-directory: android
+        run: bash ./gradlew --no-daemon :app:assembleDebug
+
+      - name: Simpan APK
+        uses: actions/upload-artifact@v7
+        with:
+          name: Sisa-Suaramu-Bab1-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error

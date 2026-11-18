@@ -1,1 +1,13 @@
-
+{
+  "name": "sisa-suaramu",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sisa Suaramu · Bab 1, Dua Es Teh",
+  "dependencies": {
+    "@capacitor/android": "6.1.2",
+    "@capacitor/core": "6.1.2"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "6.1.2"
+  }
+}
