@@ -1,0 +1,13 @@
+{
+  "name": "kabar-kalau-sampai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Kabar Kalau Sampai · Bab 1, Kursi Sebelah Jendela",
+  "dependencies": {
+    "@capacitor/android": "6.1.2",
+    "@capacitor/core": "6.1.2"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "6.1.2"
+  }
+}
